@@ -1,0 +1,30 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>MassMutual Data Science Software Engineering Recruitment</title>
+    <meta name="description" content="MassMutual Data Science Software Engineering Recruitment">
+    <meta name="author" content="SitePoint">
+
+    <link href="{% static 'styles/app.css' %}" rel="stylesheet">
+</head>
+<body>
+    <h1>MassMutual Data Science Software Engineering Recruitment</h1>
+    <div id="output"></div>
+
+
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="text/babel" src="{% static 'scripts/app.jsx' %}"></script>
+    <script type="text/babel" src="{% static 'scripts/chart.jsx' %}"></script>
+
+    
+</body>
+</html>
