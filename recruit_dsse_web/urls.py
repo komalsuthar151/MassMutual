@@ -17,7 +17,7 @@ Including another URLconf
 from django.urls import path
 
 from .views import IndexTemplateView
-from .apis import customer_gender_income, customer_exerciser, customer_insurance
+from .apis import customer_gender_income, customer_exerciser, customer_insurance, get_all_data
 
 urlpatterns = [
     #    path('admin/', admin.site.urls),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('api/customer/gender/income', customer_gender_income, name='api_customer_gender_income_url'),
     path('api/customer/exercise', customer_exerciser, name='api_customer_exercise_url'),
     path('api/customer/insurance', customer_insurance, name='api_customer_insurance_url'),
+    path('api/customer/all', get_all_data, name='api_customer_all_data'),
 ]

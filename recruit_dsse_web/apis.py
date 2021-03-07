@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from sklearn.preprocessing import LabelEncoder
+import ast
 
 from .services import query_db_df
 
@@ -57,3 +59,71 @@ def customer_insurance(_):
     }
 
     return Response(response_data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_all_data(_):
+    result_df = query_db_df(
+        "SELECT customer.race_code as customer_race, education.value as education_value, education.id as education_id, customer.home_owner as customer_home_owner, customer.state as customer_state, customer.is_smoker as customer_smoker, customer.is_exerciser as customer_exercise, customer.has_insurance as customer_insurance, customer.travel_spending as customer_travel_spending, customer.sports_leisure_spending as customer_sports_leisure_spending, customer.economic_stability as customer_economic_stability, insurance_segment.id as insurance_segment_id, insurance_segment.value as insurance_segment_value, customer.youtube_user_rank as customer_youtube_user_rank, customer.facebook_user_rank as customer_facebook_user_rank, customer.gender as customer_gender FROM customer, education, insurance_segment LIMIT 10000")
+    result_df = result_df.fillna('')
+    result_dict = result_df.to_dict('records')
+    dataArray = {}
+    label_encoder = LabelEncoder()
+
+    dataArray['customer_race'] = [i['customer_race'] for i in result_dict]
+    dataArray['customer_race_num'] = label_encoder.fit_transform(dataArray['customer_race'])
+    dataArray['education'] = [i['education_value'] for i in result_dict]
+    dataArray['education_num'] = [i['education_id'] for i in result_dict]
+    dataArray['customer_home_owner_num'] = [i['customer_home_owner'] for i in result_dict]
+    dataArray['customer_state'] = [i['customer_state'] for i in result_dict]
+    dataArray['customer_state_num'] = label_encoder.fit_transform(dataArray['customer_state'])
+    dataArray['customer_smoker_num'] = [i['customer_smoker'] for i in result_dict]
+    dataArray['customer_exercise_num'] = [i['customer_exercise'] for i in result_dict]
+    dataArray['customer_insurance_num'] = [i['customer_insurance'] for i in result_dict]
+    dataArray['customer_travel_spending_num'] = [i['customer_travel_spending'] for i in result_dict]
+    dataArray['customer_sports_leisure_spending_num'] = [i['customer_sports_leisure_spending'] for i in result_dict]
+    dataArray['customer_economic_stability_num'] = [i['customer_economic_stability'] for i in result_dict]
+    dataArray['insurance_segment'] = [i['insurance_segment_value'] for i in result_dict]
+    dataArray['insurance_segment_num'] = [i['insurance_segment_id'] for i in result_dict]
+    dataArray['customer_youtube_user_rank_num'] = [i['customer_youtube_user_rank'] for i in result_dict]
+    dataArray['customer_facebook_user_rank_num'] = [i['customer_facebook_user_rank'] for i in result_dict]
+    dataArray['customer_gender'] = [i['customer_gender'] for i in result_dict]
+    dataArray['customer_gender_num'] = label_encoder.fit_transform(dataArray['customer_gender'])
+
+    # Generating labels for Race
+    customer_race_label = []
+    for i, v in enumerate(dataArray['customer_race']):
+        temp_dict = {v: dataArray['customer_race_num'][i]}
+        customer_race_label.append(temp_dict)
+    dataArray['customer_race'] = list(map(dict, set(tuple(x.items()) for x in customer_race_label)))
+
+    # Generating labels for education
+    education_label = []
+    for i, v in enumerate(dataArray['education']):
+        temp_dict = {v: dataArray['education_num'][i]}
+        education_label.append(temp_dict)
+    dataArray['education'] = list(map(dict, set(tuple(x.items()) for x in education_label)))
+
+    # Generating labels for gender
+    customer_gender_label = []
+    for i, v in enumerate(dataArray['customer_gender']):
+        temp_dict = {v: dataArray['customer_gender_num'][i]}
+        customer_gender_label.append(temp_dict)
+    dataArray['customer_gender'] = list(map(dict, set(tuple(x.items()) for x in customer_gender_label)))
+
+    # Generating labels for state
+    customer_state_label = []
+    for i, v in enumerate(dataArray['customer_state']):
+        temp_dict = {v: dataArray['customer_state_num'][i]}
+        customer_state_label.append(temp_dict)
+    dataArray['customer_state'] = list(map(dict, set(tuple(x.items()) for x in customer_state_label)))
+
+    # Generating labels for insurance_segment
+    insurance_segment_label = []
+    for i, v in enumerate(dataArray['insurance_segment']):
+        temp_dict = {v: dataArray['insurance_segment_num'][i]}
+        insurance_segment_label.append(temp_dict)
+    dataArray['insurance_segment'] = list(map(dict, set(tuple(x.items()) for x in insurance_segment_label)))
+    print(dataArray['insurance_segment'])
+
+    return Response(dataArray, status=status.HTTP_200_OK)
+
