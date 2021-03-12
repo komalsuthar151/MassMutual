@@ -287,16 +287,16 @@ class AllChart extends React.Component {
 
 (function () {
 
-//     d3.json("/api/customer/exercise", function (data) {
-//         ReactDOM.render(<SmokersChart dataArray={data}/>, document.querySelector('#output'));
-//     });
+    d3.json("/api/customer/exercise", function (data) {
+        ReactDOM.render(<SmokersChart dataArray={data}/>, document.querySelector('#output'));
+    });
 
-    // d3.json("/api/customer/insurance", function (data) {
-    //     ReactDOM.render(<InsuranceChart dataArray={data}/>, document.querySelector('#output'));
-    // });
+    d3.json("/api/customer/insurance", function (data) {
+        ReactDOM.render(<InsuranceChart dataArray={data}/>, document.querySelector('#output1'));
+    });
 
     d3.json("/api/customer/all", function (data) {
-        ReactDOM.render(<AllChart dataArray={data}/>, document.querySelector('#output'));
+        ReactDOM.render(<AllChart dataArray={data}/>, document.querySelector('#output2'));
     });
 
 }());
